@@ -56,6 +56,7 @@ export class EventController {
       if (signatureCheck !== msg_signature) {
         return res.status(403).send('Invalid signature')
       }
+      console.log('签名验证通过', signatureCheck, msg_signature)
 
       // 3. 解密
       const decryptedXml = CryptoService.decryptMessage(encryptedMsg)
