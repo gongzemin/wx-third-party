@@ -6,7 +6,11 @@ const app = express()
 const port = process.env.PORT || 3000
 
 // 中间件
-app.use(bodyParser.text({ type: 'application/xml' }))
+app.use(
+  bodyParser.text({
+    type: ['application/xml', 'text/xml'], // 微信的请求是 Content-Type: text/xml
+  })
+)
 
 // 微信验证服务器有效性（GET）
 app.get('/wechat/callback', EventController.handleServerVerify)
