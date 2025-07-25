@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES6", // 编译目标为 ES6
+    "module": "commonjs", // 使用 CommonJS 模块规范
+    "lib": ["ES6", "DOM"], // 包含的标准库
+    "outDir": "./dist", // 编译输出目录
+    "rootDir": "./src", // 源代码根目录
+    "strict": true, // 启用所有严格类型检查选项
+    "esModuleInterop": true, // 支持 CommonJS 和 ES6 模块互操作性
+    "skipLibCheck": true, // 跳过类型声明文件检查
+    "forceConsistentCasingInFileNames": true, // 强制文件名大小写一致
+    "moduleResolution": "node", // 使用 Node.js 模块解析策略
+    "resolveJsonModule": true, // 允许导入 JSON 文件
+    "baseUrl": ".", // 基础路径
+    "paths": {
+      // 路径映射
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"], // 包含的文件
+  "exclude": ["node_modules", "dist"] // 排除的文件
+}
