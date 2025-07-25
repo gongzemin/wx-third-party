@@ -2,6 +2,8 @@ import express, { Request, Response, NextFunction } from 'express'
 import bodyParser from 'body-parser'
 import { EventController } from './controllers/event.controller'
 
+import dotenv from 'dotenv'
+dotenv.config() // 一定要放最上面，提前加载环境变量
 const app = express()
 const port = process.env.PORT || 3000
 

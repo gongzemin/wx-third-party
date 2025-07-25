@@ -1,6 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
-
 export const WECHAT_CONFIG = {
   appId: process.env.WECHAT_COMPONENT_APPID!,
   appSecret: process.env.WECHAT_COMPONENT_SECRET!,
