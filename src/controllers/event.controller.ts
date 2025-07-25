@@ -34,6 +34,8 @@ export class EventController {
   // 处理微信事件
   static async handleEvent(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log('Content-Type:', req.headers['content-type']) // 应该是 application/xml
+      console.log('Raw Body:', req) // 应该是 XML 字符串
       const { signature, timestamp, nonce, msg_signature } = req.query
       const xmlData = req.body // 假设已通过中间件解析
       console.log('原始 body:', req.body)

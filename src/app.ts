@@ -8,8 +8,10 @@ const port = process.env.PORT || 3000
 // 中间件
 app.use(bodyParser.text({ type: 'application/xml' }))
 
-// 路由
+// 微信验证服务器有效性（GET）
 app.get('/wechat/callback', EventController.handleServerVerify)
+
+// 微信事件推送处理（POST）
 app.post('/wechat/callback', EventController.handleEvent)
 
 // 错误处理
