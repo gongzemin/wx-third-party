@@ -1,15 +1,17 @@
-import axios from 'axios'
-import { WECHAT_CONFIG } from '../config/wechat'
+import { saveVerifyTicket } from '../config/redis'
 
 export class TicketService {
   // 存储 ticket（实际项目中建议使用 Redis 或数据库）
   private static componentVerifyTicket: string = ''
 
-  // 更新 ticket
-  static updateTicket(ticket: string) {
+  // 更新 ticket，同时保存到 Redis
+  static async updateTicket(ticket: string, appId?: string) {
     this.componentVerifyTicket = ticket
-    console.log('已更新 component_verify_ticket')
-    // 可以添加持久化存储逻辑
+
+    if (appId) {
+      await saveVerifyTicket(appId, ticket)
+      console.log(`ticket 已保存到 Redis，appId: ${appId}`)
+    }
   }
 
   // 获取 ticket

@@ -3,7 +3,7 @@ import { CryptoService } from '../services/crypto.service'
 import { TicketService } from '../services/ticket.service'
 import { TokenService } from '../services/token.service'
 import { xmlToJson } from '../utils/xml.util'
-import { saveVerifyTicket } from '../config/redis'
+
 
 export class EventController {
   // 处理微信服务器验证
@@ -70,8 +70,7 @@ export class EventController {
       switch (infoType) {
         case 'component_verify_ticket':
           const ticket = event.xml.ComponentVerifyTicket
-          await saveVerifyTicket(event.xml.AppId, ticket)
-          TicketService.updateTicket(ticket)
+          TicketService.updateTicket(event.xml.AppId, ticket)
           await TokenService.getComponentAccessToken()
           break
 
