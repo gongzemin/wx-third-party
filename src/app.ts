@@ -18,6 +18,8 @@ app.get('/wechat/callback', EventController.handleServerVerify)
 // 微信事件推送处理（POST）
 app.post('/wechat/callback', EventController.handleEvent)
 
+app.post('/:appid/callback', EventController.handleAppCallback)
+
 // 错误处理
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error('服务器错误:', err)
