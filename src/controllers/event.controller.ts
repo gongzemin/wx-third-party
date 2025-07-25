@@ -36,6 +36,7 @@ export class EventController {
     try {
       const { signature, timestamp, nonce, msg_signature } = req.query
       const xmlData = req.body // 假设已通过中间件解析
+      console.log('原始 body:', req.body)
 
       // 验证签名
       const encryptedMsg = xmlData.xml.Encrypt

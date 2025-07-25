@@ -1,20 +1,18 @@
 const express = require('express')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 const xml2js = require('xml2js')
 const crypto = require('crypto')
 const axios = require('axios')
+import xmlParser from 'express-xml-bodyparser'
 
 const app = express()
 const port = 3000
 
-// 替换为你的第三方平台配置
-const TOKEN = 'YOUR_TOKEN' // 微信第三方平台配置的 Token
-const ENCODING_AES_KEY = 'YOUR_ENCODING_AES_KEY' // 微信第三方平台配置的 EncodingAESKey
-const APPID = 'wxe6a7126d9dea1d76' // 第三方平台 AppID
-
-// 中间件：解析 JSON 和 XML 请求体
-app.use(bodyParser.json())
-app.use(bodyParser.text({ type: 'application/xml' }))
+// 解析 application/xml 格式
+app.use(xmlParser({ explicitArray: false }))
+// // 中间件：解析 JSON 和 XML 请求体
+// app.use(bodyParser.json())
+// app.use(bodyParser.text({ type: 'application/xml' }))
 
 // 微信服务器验证签名
 function checkSignature(signature, timestamp, nonce, token) {
