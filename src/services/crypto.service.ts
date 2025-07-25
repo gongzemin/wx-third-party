@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js'
+import crypto from 'crypto'
 import { WECHAT_CONFIG } from '../config/wechat'
 
 export class CryptoService {
@@ -11,13 +11,39 @@ export class CryptoService {
     const arr = [WECHAT_CONFIG.token, timestamp, nonce]
     if (encrypt) arr.push(encrypt)
     arr.sort()
-    return CryptoJS.SHA1(arr.join('')).toString()
+    return crypto.createHash('sha1').update(arr.join('')).digest('hex')
   }
 
-  // 消息解密（简化版，实际需使用 AES-256-CBC）
+  // 解密微信加密消息
   static decryptMessage(encryptedMsg: string): string {
-    // 此处应实现完整的 AES 解密逻辑
-    // 示例代码仅作演示，非完整实现
-    return encryptedMsg
+    const encodingAESKey = WECHAT_CONFIG.encodingAesKey // 43 字符 Base64
+    const aesKey = Buffer.from(encodingAESKey + '=', 'base64') // 解码为 32 字节
+    const iv = aesKey.subarray(0, 16) // 前16字节作为 IV
+
+    const decipher = crypto.createDecipheriv('aes-256-cbc', aesKey, iv)
+    decipher.setAutoPadding(false) // 微信使用自定义 padding
+
+    let decrypted = Buffer.concat([
+      decipher.update(encryptedMsg, 'base64'),
+      decipher.final(),
+    ])
+
+    // 去除 padding
+    decrypted = CryptoService.removePKCS7Padding(decrypted)
+
+    // 取出 XML 内容
+    const contentLength = decrypted.readUInt32BE(16)
+    const xmlContent = decrypted.slice(20, 20 + contentLength).toString()
+
+    return xmlContent
+  }
+
+  // 微信使用 PKCS#7 填充，需要手动去除
+  private static removePKCS7Padding(buffer: Buffer): Buffer {
+    const pad = buffer[buffer.length - 1]
+    if (pad < 1 || pad > 32) {
+      return buffer // 非法填充，返回原始数据
+    }
+    return buffer.slice(0, buffer.length - pad)
   }
 }

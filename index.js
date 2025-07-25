@@ -74,6 +74,31 @@ app.post('/wechat/callback', async (req, res) => {
   })
 })
 
+app.post('/:appid/callback', async (req, res) => {
+  // 这里和 /wechat/callback 基本相同逻辑
+  const appid = req.params.appid
+  const { signature, timestamp, nonce, encrypt_type, msg_signature } = req.query
+  const xmlData = req.body
+
+  if (!checkSignature(signature, timestamp, nonce, TOKEN)) {
+    return res.status(401).send('Invalid signature')
+  }
+
+  let decryptedMsg = xmlData
+  if (encrypt_type === 'aes') {
+    decryptedMsg = decryptMsg(msg_signature, timestamp, nonce, xmlData)
+  }
+
+  xml2js.parseString(decryptedMsg, { explicitArray: false }, (err, result) => {
+    if (err) return res.status(400).send('Invalid XML')
+
+    const msg = result.xml
+    console.log(`[${appid}] Received message:`, msg)
+
+    res.send('success')
+  })
+})
+
 // 路由：授权发起页
 app.get('/auth', (req, res) => {
   // 构造授权链接
