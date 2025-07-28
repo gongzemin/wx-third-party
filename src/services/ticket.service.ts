@@ -5,7 +5,7 @@ export class TicketService {
   private static componentVerifyTicket: string = ''
 
   // 更新 ticket，同时保存到 Redis
-  static async updateTicket(ticket: string, appId?: string) {
+  static async updateTicket(appId: string, ticket: string) {
     this.componentVerifyTicket = ticket
 
     if (appId) {
