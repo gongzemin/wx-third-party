@@ -43,6 +43,12 @@ export class TokenService {
     )
 
     const { component_access_token, expires_in } = res.data
+    console.log(
+      '获取到新的 component_access_token:',
+      component_access_token,
+      'expires_in:',
+      expires_in
+    )
     // 校验 expires_in 是否为有效数字
     const ttl = parseInt(String(expires_in), 10)
     if (isNaN(ttl) || ttl <= 300) {
