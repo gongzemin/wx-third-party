@@ -43,6 +43,12 @@ export class TokenService {
     )
 
     const { component_access_token, expires_in } = res.data
+    // 校验 expires_in 是否为有效数字
+    const ttl = parseInt(String(expires_in), 10)
+    if (isNaN(ttl) || ttl <= 300) {
+      console.error('Invalid expires_in value from WeChat API:', res.data)
+      throw new Error(`Invalid expires_in value: ${expires_in}`)
+    }
 
     // 更新 Redis
     await redis.set(
