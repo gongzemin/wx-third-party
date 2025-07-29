@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import { TokenService } from '../services/token.service'
-import { WECHAT_CONFIG } from '../config/wechat'
 export class AuthController {
   static async handleAuth(req: Request, res: Response) {
     try {
@@ -10,7 +9,8 @@ export class AuthController {
         'https://wx-third-party.onrender.com/auth/callback'
       ) // 微信授权完跳回你这
 
-      const url = `${WECHAT_CONFIG.apiBaseUrl}/componentloginpage?component_appid=${componentAppId}&pre_auth_code=${preAuthCode}&redirect_uri=${redirectUri}`
+      // 这个不是api.weixin.qq.com，而是mp.weixin.qq.com 是要跳转的
+      const url = `https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=${componentAppId}&pre_auth_code=${preAuthCode}&redirect_uri=${redirectUri}`
 
       res.redirect(url)
     } catch (error) {
