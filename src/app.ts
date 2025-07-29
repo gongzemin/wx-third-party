@@ -1,11 +1,16 @@
 import express, { Request, Response, NextFunction } from 'express'
 import bodyParser from 'body-parser'
+import path from 'path'
 import { EventController } from './controllers/event.controller'
 import { AuthController } from './controllers/auth.controller'
 
 import dotenv from 'dotenv'
 dotenv.config() // 一定要放最上面，提前加载环境变量
 const app = express()
+// 1. 配置模板引擎为 EJS
+app.set('view engine', 'ejs')
+// 2. 告诉 Express 模板文件的目录（相对于 src）
+app.set('views', path.join(__dirname, 'views'))
 const port = process.env.PORT || 3000
 
 // 中间件

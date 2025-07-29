@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>微信授权引导</title>
+    <!-- 可引入 Tailwind CSS CDN 快速加样式 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100"
+  >
+    <div class="w-full max-w-md bg-white p-6 rounded shadow">
+      <h1 class="text-xl font-bold mb-4">请授权给我们的平台</h1>
+      <p class="mb-6">点击按钮后将跳转至微信授权页面，授权后可使用完整服务。</p>
+      <!-- 动态插入后端传的授权链接 -->
+      <button
+        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+        onclick="window.location.href='<%= authUrl %>'"
+      >
+        点击授权
+      </button>
+    </div>
+  </body>
+</html>
