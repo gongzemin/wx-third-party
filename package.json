@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/app.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp -r src/views dist/views",
     "start": "node dist/app.js",
     "dev": "ts-node src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
