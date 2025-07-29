@@ -5,13 +5,14 @@ export class AuthController {
     try {
       const componentAppId = process.env.WECHAT_COMPONENT_APPID!
       const preAuthCode = await TokenService.getPreAuthCode() // 从微信获取
+      console.log('获取到的 pre_auth_code:', preAuthCode)
       const redirectUri = encodeURIComponent(
         'https://wx-third-party.onrender.com/auth/callback'
       ) // 微信授权完跳回你这
 
       // 这个不是api.weixin.qq.com，而是mp.weixin.qq.com 是要跳转的
       const url = `https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=${componentAppId}&pre_auth_code=${preAuthCode}&redirect_uri=${redirectUri}`
-
+      console.log('授权跳转url：', url)
       res.redirect(url)
     } catch (error) {
       console.error('授权跳转失败', error)
