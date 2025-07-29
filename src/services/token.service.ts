@@ -27,6 +27,72 @@ export class TokenService {
     return await this.refreshComponentAccessToken()
   }
 
+  static async getPreAuthCode(): Promise<string> {
+    const token = await this.getComponentAccessToken()
+
+    const res = await axios.post(
+      `${WECHAT_CONFIG.apiBaseUrl}/component/api_create_preauthcode?component_access_token=${token}`,
+      {
+        component_appid: WECHAT_CONFIG.appId,
+      }
+    )
+
+    const { pre_auth_code, expires_in, errcode, errmsg } = res.data
+    console.log(
+      '获取到新的 pre_auth_code:',
+      pre_auth_code,
+      'expires_in:',
+      expires_in
+    )
+
+    if (errcode) {
+      console.error('获取预授权码失败:', res.data)
+      throw new Error(`微信 API 错误: ${errmsg}`)
+    }
+
+    if (!pre_auth_code || !expires_in) {
+      throw new Error('微信返回的预授权码数据不完整')
+    }
+
+    console.log('获取到新的 pre_auth_code:', pre_auth_code)
+    return pre_auth_code
+  }
+
+  /**
+   * 用 auth_code 换取 authorizer_access_token
+   */
+  static async getAuthorizerAccessToken(authCode: string): Promise<any> {
+    const accessToken = await this.getComponentAccessToken()
+
+    const url = `${WECHAT_CONFIG.apiBaseUrl}/component/api_query_auth?component_access_token=${accessToken}`
+
+    const response = await axios.post(url, {
+      component_appid: process.env.WECHAT_COMPONENT_APPID,
+      authorization_code: authCode,
+    })
+
+    const data = response.data
+    console.log('获取到的授权信息:', data)
+
+    if (data.errcode) {
+      throw new Error(
+        `获取 authorizer_access_token 失败: ${JSON.stringify(data)}`
+      )
+    }
+
+    return data.authorization_info
+  }
+
+  // 生成扫码链接发起授权
+  static async getAuthUrl(redirectUri: string): Promise<string> {
+    const preAuthCode = await this.getPreAuthCode()
+    return `https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=${
+      WECHAT_CONFIG.appId
+    }&pre_auth_code=${preAuthCode}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}`
+  }
+
   private static async refreshComponentAccessToken(): Promise<string> {
     const ticket = await TicketService.getTicket()
     if (!ticket) {

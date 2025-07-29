@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import bodyParser from 'body-parser'
 import { EventController } from './controllers/event.controller'
+import { AuthController } from './controllers/auth.controller'
 
 import dotenv from 'dotenv'
 dotenv.config() // 一定要放最上面，提前加载环境变量
@@ -20,7 +21,13 @@ app.get('/wechat/callback', EventController.handleServerVerify)
 // 微信事件推送处理（POST）
 app.post('/wechat/callback', EventController.handleEvent)
 
+// 消息与事件接收配置
 app.post('/:appid/callback', EventController.handleAppCallback)
+
+// 授权发起页域名
+app.get('/auth', AuthController.handleAuth)
+// 微信授权完跳回你这
+app.get('/auth/callback', AuthController.handleAuthCallback)
 
 // 错误处理
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
