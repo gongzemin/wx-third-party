@@ -4,7 +4,6 @@ import { TicketService } from '../services/ticket.service'
 import { TokenService } from '../services/token.service'
 import { xmlToJson } from '../utils/xml.util'
 
-
 export class EventController {
   // 处理微信服务器验证
   static async handleServerVerify(
@@ -36,7 +35,7 @@ export class EventController {
   static async handleEvent(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('Content-Type:', req.headers['content-type']) // 应该是 application/xml
-      console.log('Raw Body:', req.query) // 应该是 XML 字符串
+      console.log('Raw Body:', req.body) // 打印原始请求体
       const { signature, timestamp, nonce, msg_signature } = req.query
       // 1. 解析 XML
       const parsedXml = await xmlToJson(req.body)

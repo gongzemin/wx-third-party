@@ -21,3 +21,4 @@ coverage/
 *.swn
 *.swo
 *.env
+_*
