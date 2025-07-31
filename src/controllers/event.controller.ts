@@ -77,6 +77,10 @@ export class EventController {
           // 处理授权成功事件
           break
 
+        case 'updateauthorized':
+          // 处理更新授权事件
+          break
+
         case 'unauthorized':
           // 处理取消授权事件
           break
