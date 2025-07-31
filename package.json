@@ -19,7 +19,6 @@
     "dotenv": "^17.2.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "express-xml-bodyparser": "^0.3.0",
     "ioredis": "^5.6.1",
     "xml2js": "^0.6.2"
   },
