@@ -13,6 +13,7 @@ export class EventController {
   ) {
     try {
       const { signature, timestamp, nonce, echostr } = req.query
+      console.log('验证请求参数:', req.query)
 
       // 验证签名
       const isValid =
